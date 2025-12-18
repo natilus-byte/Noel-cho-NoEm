@@ -519,9 +519,23 @@
             });
 
             const cameraUtils = new Camera(video, {
-                onFrame: async () => { await hands.send({image: video}); }, width: 320, height: 240
-            });
-            cameraUtils.start();
+    onFrame: async () => {
+        await hands.send({ image: video });
+    },
+    facingMode: 'user', // Ưu tiên camera trước cho điện thoại
+    width: 640,
+    height: 480
+});
+
+// Thêm đoạn này để ép video phải chạy trên Safari/iPhone
+video.setAttribute('autoplay', '');
+video.setAttribute('muted', '');
+video.setAttribute('playsinline', '');
+
+cameraUtils.start().catch(err => {
+    alert("Lỗi camera: " + err);
+});
+
         }
 
         window.addEventListener('resize', () => {
